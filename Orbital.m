@@ -7,7 +7,7 @@ l = 1;
 m = 0;  
 
 % plotting parameters
-probabilitydensity = 1e-5;
+probabilitydensity = 1e-8;
 a = 1; 
 
 % angular part (Condon-Shortley)
@@ -27,7 +27,7 @@ R = @(n, l, r) sqrt((2 / (a * n))^3 * factorial(n - l - 1) / (2 * n * factorial(
 % wave function
 psi = @(n, l, m, r, theta, phi) R(n, l, r) .* Y(l, m, theta, phi);
 
-% setting the grid
+
 border = 32;
 accuracy = 100;
 raster = linspace(-border, border, accuracy);
