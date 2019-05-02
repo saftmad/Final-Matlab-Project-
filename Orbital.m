@@ -1,4 +1,4 @@
-% plotting hydrogen orbitals, by Peter van Alem
+
 close all
 
 % quantum numbers
