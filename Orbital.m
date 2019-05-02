@@ -2,19 +2,17 @@
 close all
 
 % quantum numbers
-n = 4 
-l = 1;  %  0 <= l < n 
-m = 0;  %  -l <= m <= l
+n = 2; 
+l = 1;  
+m = 0;  
 
 % plotting parameters
 probabilitydensity = 1e-5;
-a = 1;  % Bohr radius
+a = 1; 
 
 % angular part (Condon-Shortley)
-SphericalYlm = @(l, m, theta, phi) (-1)^m * sqrt((2 * l + 1) / (4 * pi) * ...
-    factorial(l - abs(m)) / factorial(l + abs(m))) * ...
-    AssociatedLegendre(l, m, cos(theta)) .* exp(1i * m * phi);
-% real basis
+SphericalYlm = @(l, m, theta, phi) (-1)^m * sqrt((2 * l + 1) / (4 * pi) * factorial(l - abs(m)) / factorial(l + abs(m))) * AssociatedLegendre(l, m, cos(theta)) .* exp(1i * m * phi);
+
 if (m < 0)
     Y = @(l, m, theta, phi) sqrt(2) * (-1)^m * imag(SphericalYlm(l, abs(m), theta, phi));
 elseif (m == 0)
@@ -24,9 +22,7 @@ else
 end
 
 % radial part
-R = @(n, l, r) sqrt((2 / (a * n))^3 * factorial(n - l - 1) / (2 * n * factorial(n + l))) .* ...
-    exp(-r / (a * n)) .* (2 * r / (a * n)).^l * 1 / factorial(n - l - 1 + 2 * l + 1) .* ...
-    AssociatedLaguerre(n - l - 1, 2 * l + 1, 2 * r / (a * n));
+R = @(n, l, r) sqrt((2 / (a * n))^3 * factorial(n - l - 1) / (2 * n * factorial(n + l))) .* exp(-r / (a * n)) .* (2 * r / (a * n)).^l * 1 / factorial(n - l - 1 + 2 * l + 1) .* AssociatedLaguerre(n - l - 1, 2 * l + 1, 2 * r / (a * n));
 
 % wave function
 psi = @(n, l, m, r, theta, phi) R(n, l, r) .* Y(l, m, theta, phi);
@@ -37,18 +33,15 @@ accuracy = 100;
 raster = linspace(-border, border, accuracy);
 [x, y, z] = ndgrid(raster, raster, raster);
 
-% conversion Cartesian to spherical coordinates
+
 r = sqrt(x.^2 + y.^2 + z.^2);
 theta = acos(z ./ r);
 phi = atan2(y, x);
 
 % plot orbital,  - and + wave function phase
-colors = sign(psi(n, l, m, r, theta, phi));
-isosurface(psi(n, l, m, r, theta, phi).^2, probabilitydensity, colors);
+f = sign(psi(n, l, m, r, theta, phi));
+isosurface(psi(n, l, m, r, theta, phi).^2, probabilitydensity,f);
 colormap([0 0 1; 1 0.5 0])
-material dull
-
-
 
 % functions
 function Anm = AssociatedLaguerre(n,m,x)
@@ -66,3 +59,5 @@ Alm = 0;
     end
     Alm = (1 - x.^2).^(abs(m) / 2) .* (factorial(abs(m)) / 2^l * Alm);
 end
+
+
